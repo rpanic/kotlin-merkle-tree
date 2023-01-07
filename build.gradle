@@ -1,0 +1,51 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.7.10'
+    id 'maven-publish'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.7.10'
+}
+
+group 'com.rpanic'
+version '0.1'
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://maven.pkg.jetbrains.space/rpanic/p/njord/njord"
+        credentials {
+            username = spaceUsername
+            password = spacePassword
+        }
+    }
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+
+    implementation 'com.github.shyiko.levelkt:levelkt:0.1.0'
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1"
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = "com.rpanic"
+            artifactId = "kotlin-merkle-tree"
+            version = "0.1.1"
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            url "https://maven.pkg.jetbrains.space/rpanic/p/njord/njord"
+            credentials {
+                username = spaceUsername
+                password = spacePassword
+            }
+        }
+    }
+}
+
+/*
+gradle-download
+githubgradledownload
+ */
