@@ -23,6 +23,8 @@ dependencies {
 
     implementation 'com.github.shyiko.levelkt:levelkt:0.1.0'
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1"
+
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:1.7.10"
 }
 
 publishing {
@@ -30,7 +32,7 @@ publishing {
         maven(MavenPublication) {
             groupId = "com.rpanic"
             artifactId = "kotlin-merkle-tree"
-            version = "0.1.1"
+            version = "0.1.2"
             from components.java
         }
     }

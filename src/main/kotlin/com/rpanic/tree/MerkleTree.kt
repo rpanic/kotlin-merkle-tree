@@ -44,14 +44,19 @@ open class MerkleTree<T : BigIntish>(val store: MerkleTreeStore<T, T>, val optio
         setNode(0, index, value)
         //Recalculate tree
         var c = index.toBigInt()
+        var last = index.toBigInt() to value
         for(level in 1 until this.height){
 
             c /= BigInteger.valueOf(2)
 
-            val left = getNode(level - 1, TField(c * 2.toBigInteger()))
-            val right = getNode(level - 1, TField(c * 2.toBigInteger() + BigInteger.ONE))
+            val mod2Base = c * 2.toBigInteger()
+            val left = if(last.first == mod2Base) last.second else getNode(level - 1, TField(mod2Base))
+            val right = if(last.first != mod2Base) last.second else getNode(level - 1, TField(mod2Base + BigInteger.ONE))
 
-            setNode(level, TField(c), options.hash(listOf(left, right)))
+            val hash = options.hash(listOf(left, right))
+            setNode(level, TField(c), hash)
+
+            last = c to hash
         }
 
         store.commit()
