@@ -77,5 +77,6 @@ open class MemoryMerkleTreeStore<T : BigIntish>(val parent: MerkleTreeStore<T, T
                 parent.setNode(index, level, value)
             }
         }
+        parent.commit()
     }
 }

@@ -148,8 +148,8 @@ open class LevelTreeStore<K : Any, V : Any>(
             parent.setNode(key, level, getNode(key, level)!!)
 
             curr = keys.next()
-
         }
+        parent.commit()
     }
 
 
