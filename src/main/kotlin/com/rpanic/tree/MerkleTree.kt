@@ -63,23 +63,8 @@ open class MerkleTree<T : BigIntish>(val store: MerkleTreeStore<T, T>, val optio
 
     }
 
-    fun keyToIndex(key: T) : T {
-        // the bit map is reversed to make reconstructing the key during proving more convenient
-
-        val keyBits = key
-            .toBigInt()
-            .toString(2)
-            .let {  it.reversed() + (0 until (height - it.length)).joinToString(""){ "0" } }
-            .slice(0 until height - 1)
-            .reversed()
-            .map { b -> if(b == '1') 1 else 0 }
-
-        var n = BigInteger.ZERO;
-        for (i in keyBits.indices) {
-            n += BigInteger.valueOf(2).pow(i) * BigInteger.valueOf(keyBits[i].toLong())
-        }
-
-        return TField(n)
+    open fun keyToIndex(key: T) : T {
+        return key
     }
 
     fun set(key: T, value: T) {
@@ -121,38 +106,16 @@ open class MerkleTree<T : BigIntish>(val store: MerkleTreeStore<T, T>, val optio
         return hash.toString() == this.getRoot().toString();
     }
 
-    fun getDetached(key: String) : MerkleTree<T>{
-        return VirtualizedMerkleTree(height, options, store.virtualize(key), this)
-    }
+//    fun getDetached(key: String) : MerkleTree<T>{
+//        return VirtualizedMerkleTree(height, options, store.virtualize(key), this)
+//    }
 
-    private fun TField(i: Int): T {
+    protected fun TField(i: Int): T {
         return TField(i.toBigInteger())
     }
 
-    private fun TField(it: BigInteger): T {
+    protected fun TField(it: BigInteger): T {
         return options.fromBigInt(it)
-    }
-
-}
-
-open class VirtualizedMerkleTree<T : BigIntish> (
-    height: Int,
-    options: MerkleTreeOptions<T>,
-    store: MerkleTreeStore<T, T>,
-    val parent: MerkleTree<T>)
-: MerkleTree<T>(store, options, height) {
-
-    fun mergeIntoParent(){
-
-        store.merge()
-        store.destroy()
-
-    }
-
-    fun destroy(){
-
-        store.destroy()
-
     }
 
 }
